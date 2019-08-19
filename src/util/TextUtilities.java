@@ -1,3 +1,5 @@
+package util;
+
 public class TextUtilities {
     public static int countOccurrence(String text, String keyword) {
         int count = 0;
