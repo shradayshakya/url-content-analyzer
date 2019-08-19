@@ -1,4 +1,4 @@
-package util;
+package utils;
 
 public class TextUtilities {
     public static int countOccurrence(String text, String keyword) {

@@ -1,7 +1,7 @@
 package components;
 
-import util.ContentExtractor;
-import util.TextUtilities;
+import utils.ContentExtractor;
+import utils.TextUtilities;
 
 import java.util.HashMap;
 import java.util.Map;
