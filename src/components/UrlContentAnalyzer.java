@@ -21,8 +21,8 @@ public class UrlContentAnalyzer extends Thread {
         for (String keyword : keywordMap.keySet()) {
             logger.info(
                     this.urlString + " : '" +
-                            keyword + "' => " +
-                            this.keywordMap.get(keyword)
+                    keyword + "' => " +
+                    this.keywordMap.get(keyword)
             );
         }
     }
