@@ -1,5 +1,7 @@
 package components;
 
+import utils.ContentExtractor;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -11,11 +13,7 @@ public class WebCrawler {
         Logger logger = Logger.getLogger(WebCrawler.class.getName());
 
         String[] keywords = { "oracle" , "java" };
-        String[] urls = {
-                "https://docs.oracle.com/en/java/",
-                "https://docs.oracle.com/en/database/",
-                "https://docs.oracle.com/en/operating-systems/"
-        };
+        List<String> urls = ContentExtractor.getListFromFile("src/urls.txt");
 
         List<UrlContentAnalyzer> urlThreads = new ArrayList<>();
 
@@ -26,21 +24,11 @@ public class WebCrawler {
         }
 
         logger.info("*************************************************************");
+        // To check if all the threads have completed of not
         for (UrlContentAnalyzer urlThread: urlThreads) {
             try{
+                // Pauses the execution until current thread has been successfully executed
                 urlThread.join();
-
-                Map<String, Integer> keywordMap = urlThread.getKeywordMap();
-                for (String keyword: keywordMap.keySet()) {
-                    logger.info(
-                            urlThread.getUrlString() + " : '" +
-                                    keyword + "' => " +
-                                    keywordMap.get(keyword)
-                    );
-
-                    logger.info(urlThread.getUrlString() + "\n'");
-                }
-
             } catch (InterruptedException e) {
                 logger.severe(e.getMessage());
             }
