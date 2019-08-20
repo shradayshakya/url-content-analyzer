@@ -10,11 +10,10 @@ import java.util.logging.Logger;
 public class WebCrawler {
     public void start(){
         long startTime = System.currentTimeMillis();
+
         Logger logger = Logger.getLogger(WebCrawler.class.getName());
-
-        String[] keywords = { "oracle" , "java" };
+        String[] keywords = { "oracle", "java"};
         List<String> urls = ContentExtractor.getListFromFile("src/urls.txt");
-
         List<UrlContentAnalyzer> urlThreads = new ArrayList<>();
 
         for (String url : urls){
@@ -36,7 +35,6 @@ public class WebCrawler {
         logger.info("*************************************************************");
 
         long timeTaken = System.currentTimeMillis() - startTime;
-
         logger.info("Total time taken: " + timeTaken + " milliseconds");
     }
 }

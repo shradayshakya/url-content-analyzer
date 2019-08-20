@@ -35,12 +35,4 @@ public class UrlContentAnalyzer extends Thread {
             this.keywordMap.put(keyword, 0);
         }
     }
-
-    public String getUrlString() {
-        return urlString;
-    }
-
-    public Map<String, Integer> getKeywordMap() {
-        return keywordMap;
-    }
 }
