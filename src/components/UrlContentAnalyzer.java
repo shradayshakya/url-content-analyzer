@@ -9,30 +9,44 @@ import java.util.logging.Logger;
 
 public class UrlContentAnalyzer extends Thread {
     private String urlString;
-    private Map<String, Integer> keywordMap;
+    private static Map<String, Integer> keywordMap;
 
     public void run(){
+        long startTime = System.currentTimeMillis();
+
         Logger logger = Logger.getLogger(WebCrawler.class.getName());
         String content = TextUtilities.parseHTML(ContentExtractor.getContentFromUrl(urlString));
-        for (String keyword : keywordMap.keySet()) {
-            this.keywordMap.replace(keyword, TextUtilities.countOccurrence(content, keyword));
-        }
 
         for (String keyword : keywordMap.keySet()) {
+            int count = TextUtilities.countOccurrence(content, keyword);
+
+            long timeTaken = System.currentTimeMillis() - startTime;
             logger.info(
                     this.urlString + " : '" +
-                    keyword + "' => " +
-                    this.keywordMap.get(keyword)
+                            keyword + "' => " +
+                            count + " occurrence ("
+                            + timeTaken + " ms)"
             );
+            synchronized ( UrlContentAnalyzer.keywordMap ) {
+                UrlContentAnalyzer.keywordMap.replace(keyword,UrlContentAnalyzer.keywordMap.get(keyword) + count );
+                logger.info(
+                        "Total : '" +
+                                keyword + "' => " +
+                                UrlContentAnalyzer.keywordMap.get(keyword) + " occurrence ("
+                                + timeTaken + " ms)"
+                );
+            }
         }
     }
 
-    public UrlContentAnalyzer(String urlString, String[] keywords){
-        this.urlString = urlString;
-        this.keywordMap = new HashMap<>();
-
+    public static void initiateKeywordMap(String[] keywords) {
+        UrlContentAnalyzer.keywordMap = new HashMap<>();
         for (String keyword: keywords) {
-            this.keywordMap.put(keyword, 0);
+            UrlContentAnalyzer.keywordMap.put(keyword, 0);
         }
+    }
+
+    public UrlContentAnalyzer(String urlString){
+        this.urlString = urlString;
     }
 }

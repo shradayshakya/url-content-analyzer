@@ -9,26 +9,29 @@ import java.util.logging.Logger;
 
 public class WebCrawler {
 
-    static final int POOL_SIZE = 5;
+    static final int POOL_SIZE = 100;
 
     public void start(){
         long startTime = System.currentTimeMillis();
 
         Logger logger = Logger.getLogger(WebCrawler.class.getName());
-        String[] keywords = { "oracle", "java"};
+        String[] keywords = { "oracle", "java" };
         List<String> urls = ContentExtractor.getListFromFile("src/urls.txt");
 
         ExecutorService analyzersManager = Executors.newFixedThreadPool(POOL_SIZE);
 
-        logger.info("*************************************************************");
+        UrlContentAnalyzer.initiateKeywordMap(keywords);
+
+        logger.info("**********************************************************************************");
         for (String url : urls){
-            UrlContentAnalyzer analyzer = new UrlContentAnalyzer(url, keywords);
+            UrlContentAnalyzer analyzer = new UrlContentAnalyzer(url);
             analyzersManager.execute(analyzer);
         }
+
         analyzersManager.shutdown();
         // Waiting to complete execution of all threads
         while (!analyzersManager.isTerminated()) { }
-        logger.info("*************************************************************");
+        logger.info("**********************************************************************************");
 
         long timeTaken = System.currentTimeMillis() - startTime;
         logger.info("Total time taken: " + timeTaken + " milliseconds");
